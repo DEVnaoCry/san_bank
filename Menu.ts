@@ -1,42 +1,28 @@
 import readlinesync = require("readline-sync");
-import { colors } from './src/util/Colors';
-import { Conta } from "./src/util/Model.ts/Conta";
-import { ContaCorrente } from "./src/util/Model.ts/ContaCorrente";
+import { colors } from "./src/util/Colors";
+import { Conta } from "./src/model/Conta";
+import { ContaCorrente } from "./src/model/ContaCorrente";
+import { ContaPoupanca } from "./src/model/ContaPoupanca";
+import { ContaController } from "./src/controller/ContaController";
 
 export function main() {
 
-    let opcao: number;
+    let opcao, numero, agencia, tipo, saldo, limite, aniversario, valor, numeroDestino : number;
+    let titular: string;
+    const tipoContas = ['Conta Corrente', 'Conta Poupanca'];
 
-    //Instanciando um novo objeto da Classe Conta.
-    //console.log("\nCriar o objeto da Classe Conta")
-    //let c1: Conta = new Conta(1,123, 1, "Fulano", 40000);
+    // Instância da Classe ContaController
+    const contas: ContaController = new ContaController();
 
-    //visualizando todos o dados da conta criada
-    //c1.visualizar();
+    // Instância da Classe Conta Corrente 
+    // Adicionada na Collection listaContas
+    const contaCorrente: ContaCorrente = new ContaCorrente(contas.gerarNumero(), 665, 1, "Fulano", 2000, 1000)
+    contas.cadastrar(contaCorrente);
 
-    //console.log("\nAlterar o Saldo para  R$ 450000")
-    //c1.set_saldo(450000) = modificação de saldo
-
-
-    //console.log(c1.get_saldo()); = recuperando valor do Saldo
-
-
-    //c1.sacar(500);
-    //c1.visualizar();
-
-    //c1.depositar(75)
-    //.visualizar();
-
-    const cc1: ContaCorrente = new ContaCorrente(2, 669, 1, "Jalam Bipal", 66600000000, 1000000);
-    cc1.visualizar();
-
-    cc1.sacar(100000)
-
-    cc1.visualizar();
-
-    cc1.depositar(850);
-
-    cc1.visualizar();
+    // Instância da da Classe ContaPoupanca
+    // Adicionada na Collection listaContas
+    const contaPoupanca: ContaPoupanca = new ContaPoupanca(contas.gerarNumero(), 666, 2, "Beltrano", 1500, 100);
+    contas.cadastrar(contaPoupanca);
 
     while (true) {
 
@@ -74,7 +60,7 @@ export function main() {
         opcao = readlinesync.questionInt("");
 
         if (opcao == 9) {
-            console.log(colors.bg.black, colors.fg.yellow,
+            console.log(colors.fg.greenstrong,
                 "\nSan-Bank - Provando que dinheiro, traz felicidade!");
             sobre();
             console.log(colors.reset, "");
@@ -83,55 +69,174 @@ export function main() {
 
         switch (opcao) {
             case 1:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\n\nCriar Conta\n\n", colors.reset);
+
+                console.log("Digite o Número da Agência: ")
+                agencia = readlinesync.questionInt("")
+
+                console.log("Digite o Nome do Titular: ")
+                titular = readlinesync.question("")
+
+                console.log("Informe o tipo da Conta: ")
+                tipo = readlinesync.keyInSelect(tipoContas, "", { cancel: false }) + 1
+
+                console.log("Digite o Saldo da Conta: ")
+                saldo = readlinesync.questionFloat("")
+
+                switch (tipo) {
+                    case 1:
+                        console.log("Digite o Limite da Conta: ")
+                        limite = readlinesync.questionFloat("")
+                        contas.cadastrar(
+                            new ContaCorrente(contas.gerarNumero(), agencia, tipo, titular, saldo, limite)
+                        )
+                        break;
+                    case 2:
+                        console.log("Digite o dia do aniversário da Conta: ")
+                        aniversario = readlinesync.questionInt("")
+                        contas.cadastrar(
+                            new ContaPoupanca(contas.gerarNumero(), agencia, tipo, titular, saldo, aniversario)
+                        )
+                        break;
+                }
 
                 keyPress()
                 break;
             case 2:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\n\nListar todas as Contas\n\n", colors.reset);
+
+                // Chamada do Método listarTodas() da Classe ContaController
+                contas.listarTodas();
 
                 keyPress()
                 break;
             case 3:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\n\nConsultar dados da Conta - por número\n\n", colors.reset);
+
+                console.log("Digite o Número da Conta: ")
+                numero = readlinesync.questionInt("")
+
+                contas.procurarPorNumero(numero);
 
                 keyPress()
                 break;
             case 4:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\n\nAtualizar dados da Conta\n\n", colors.reset);
+
+                console.log("Digite o Número da Conta: ")
+                numero = readlinesync.questionInt("")
+
+                let conta = contas.buscarNoArray(numero)
+
+                if (conta !== null) {
+
+                    console.log("Digite o Número da Agência: ")
+                    agencia = readlinesync.questionInt("")
+
+                    console.log("Digite o Nome do Titular: ")
+                    titular = readlinesync.question("")
+
+                    tipo = conta.tipo
+
+                    console.log("Digite o Saldo da Conta: ")
+                    saldo = readlinesync.questionFloat("")
+
+                    switch (tipo) {
+                        case 1:
+                            console.log("Digite o Limite da Conta: ")
+                            limite = readlinesync.questionFloat("")
+                            contas.atualizar(
+                                new ContaCorrente(numero, agencia, tipo, titular, saldo, limite)
+                            )
+                            break;
+                        case 2:
+                            console.log("Digite o dia do aniversário da Conta: ")
+                            aniversario = readlinesync.questionInt("")
+                            contas.atualizar(
+                                new ContaPoupanca(numero, agencia, tipo, titular, saldo, aniversario)
+                            )
+                            break;
+                    }
+
+                } else {
+                    console.log("A Conta não foi Encontrada!")
+                }
 
                 keyPress()
                 break;
             case 5:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\n\nApagar uma Conta\n\n", colors.reset);
+
+                console.log("Digite o Número da Conta: ")
+                numero = readlinesync.questionInt("")
+
+                contas.deletar(numero);
 
                 keyPress()
                 break;
             case 6:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\n\nSaque\n\n", colors.reset);
+
+                console.log("Digite o Número da Conta: ")
+                numero = readlinesync.questionInt("")
+
+                console.log("Digite o valor do Saque: ")
+                valor = readlinesync.questionFloat("")
+
+                contas.sacar(numero, valor);
 
                 keyPress()
                 break;
             case 7:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\n\nDepósito\n\n", colors.reset);
+
+                console.log("Digite o Número da Conta: ")
+                numero = readlinesync.questionInt("")
+
+                console.log("Digite o valor do Depósito: ")
+                valor = readlinesync.questionFloat("")
+
+                contas.depositar(numero, valor);
 
                 keyPress()
                 break;
             case 8:
-                console.log(colors.bg.black, colors.fg.yellow,
-                    "\n\nTransferencia de Valor\n\n", colors.reset);
+                console.log(colors.fg.whitestrong,
+                    "\n\nTransferência entre Contas\n\n", colors.reset);
+
+                console.log("Digite o Número da Conta de Origem: ")
+                numero = readlinesync.questionInt("")
+
+                console.log("Digite o Número da Conta de Destino: ")
+                numeroDestino = readlinesync.questionInt("")
+
+                console.log("Digite o valor do Depósito: ")
+                valor = readlinesync.questionFloat("")
+
+                contas.transferir(numero, numeroDestino, valor);
 
                 keyPress()
                 break;
+            case 9:
+                console.log(colors.fg.whitestrong,
+                    "\n\nConsultar conta por titular\n\n", colors.reset);
+
+                console.log("Digite o Nome do Titular: ")
+                titular = readlinesync.question("")
+
+                contas.procurarPorTitular(titular);
+
+                keyPress();
+                break;
             default:
-                console.log(colors.bg.black, colors.fg.yellow,
+                console.log(colors.fg.whitestrong,
                     "\nOpção Inválida!\n", colors.reset);
 
                 keyPress()
@@ -143,15 +248,11 @@ export function main() {
 
 /* Função com os dados da pessoa desenvolvedora */
 function sobre(): void {
-    console.log(colors.bg.black, colors.fg.green,
-
-        "\n******************************************************");
+              ("\n******************************************************");
     console.log("Projeto Desenvolvido por: Filipe Santiago              ");
     console.log("Email para o contato- work.frodrigues@gmail.com        ");
     console.log("https://github.com/DEVnaoCry                           ");
     console.log("*******************************************************");
-
-
 }
 
 function keyPress(): void {

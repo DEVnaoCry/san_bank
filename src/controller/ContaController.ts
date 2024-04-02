@@ -1,6 +1,5 @@
 import { Conta } from "../model/Conta";
 import { ContaRepository } from "../repository/ContaRepository";
-import { colors } from "../util/Colors";
 
 export class ContaController implements ContaRepository {
 
@@ -13,118 +12,115 @@ export class ContaController implements ContaRepository {
         }
     }
 
-
     // Collection Array que aramzenará os Objetos das Classes
     // ContaCorrente e ContaPoupanca
     private listaContas: Array<Conta> = new Array<Conta>();
+
+    // Atributo que será utilizado para controlar o numero das
+    // contas
     public numero: number = 0;
 
+    // Método para Listar os dados de uma Conta
+    // inseridas na Collection listaContas
     procurarPorNumero(numero: number): void {
         let buscaConta = this.buscarNoArray(numero);
 
         if (buscaConta !== null)
             buscaConta.visualizar()
         else
-            console.log("\nConta não foi encontrada!")
+            console.log("\nConta não foi Encontrada!")
     }
 
-
-    // Collection Array que aramzenará os Objetos das Classes
-    // ContaCorrente e ContaPoupanca
+    // Método para Listar os dados de todas as Contas
+    // inseridas na Collection listaContas
     listarTodas(): void {
         for (let conta of this.listaContas) {
             conta.visualizar();
         }
     }
-    
+
     // Método para adicionar Objetos das Classes 
     // ContaCorrente e ContaPoupanca
     // na Collection listaContas
     cadastrar(conta: Conta): void {
         this.listaContas.push(conta);
-        console.log("A Conta foi adicionada!");
+        console.log("A Conta foi adicionada!")
     }
 
+    // Método para atualizar os dados de uma Conta
+    // inseridas na Collection listaContas
     atualizar(conta: Conta): void {
-        let buscaConta = this.buscarNoArray(conta.numero)
+        let buscaConta = this.buscarNoArray(conta.numero);
 
         if (buscaConta !== null) {
             this.listaContas[this.listaContas.indexOf(buscaConta)] = conta;
-            console.log(A conta número ${ conta.numero } foi atualizada com sucesso!)
+            console.log(`A Conta número ${conta.numero} foi Atualizada com êxito!`)
         } else
-            console.log("\nConta não foi encontrada!")
+            console.log("\nConta não foi Encontrada!")
     }
 
+    // Método para deletar uma Conta
+    // inseridas na Collection listaContas
     deletar(numero: number): void {
         let buscaConta = this.buscarNoArray(numero);
 
         if (buscaConta !== null) {
-            this.listaContas.splice(this.listaContas.indexOf(buscaConta), 1) // o 1 serve para apagar apenas ele, se colocasse 2 por exemplo, apagaria ele e o próximo
-            console.log(A conta número ${ numero } foi excluída com sucesso!)
+            this.listaContas.splice(this.listaContas.indexOf(buscaConta), 1)
+            console.log(`A Conta número ${numero} foi Excluída com êxito!`)
         } else
-            console.log("\nConta não foi encontrada!")
+            console.log("\nConta não foi Encontrada!")
     }
 
-    public sacar(numero: number, valor: number): void {
+    sacar(numero: number, valor: number): void {
         let buscaConta = this.buscarNoArray(numero);
 
-        if (buscaConta != null) {
-
+        if (buscaConta !== null) {
             if (buscaConta.sacar(valor) === true)
-                console.log(colors.fg.green, "\nO Saque na Conta numero: " + numero +
-                    " foi efetuado com sucesso!", colors.reset);
-
+                console.log(`O Saque na Conta número ${numero} foi Efetuado com êxito!`)
         } else
-            console.log(colors.fg.red, "\nA Conta numero: " + numero +
-                " não foi encontrada!", colors.reset);
-
+            console.log("\nConta não foi Encontrada!")
     }
-  
-    public depositar(numero: number, valor: number): void {
+
+    depositar(numero: number, valor: number): void {
         let buscaConta = this.buscarNoArray(numero);
 
-        if (buscaConta != null) {
-            buscaConta.depositar(valor);
-            console.log(colors.fg.green, "\nO Depósito na Conta numero: " + numero +
-                " foi efetuado com sucesso!", colors.reset);
+        if (buscaConta !== null) {
+            buscaConta.depositar(valor)
+            console.log(`O Depósito na Conta número ${numero} foi Efetuado com êxito!`)
         } else
-            console.log(colors.fg.red, "\nA Conta numero: " + numero +
-                " não foi encontrada!", colors.reset);
+            console.log("\nConta não foi Encontrada!")
     }
 
-    public transferir(numeroOrigem: number, numeroDestino: number, valor: number): void {
+    transferir(numeroOrigem: number, numeroDestino: number, valor: number): void {
+
         let contaOrigem = this.buscarNoArray(numeroOrigem);
         let contaDestino = this.buscarNoArray(numeroDestino);
 
-        if (contaOrigem != null && contaDestino != null) {
-            if (contaOrigem.sacar(valor) == true) {
-                contaDestino.depositar(valor);
-                console.log(colors.fg.green, "\nA Transferência da Conta numero: " + numeroOrigem +
-                    " para a Conta numero: " + numeroDestino + " foi efetuada com sucesso!",
-                    colors.reset);
+        if (contaOrigem !== null && contaDestino !== null) {
+            if (contaOrigem.sacar(valor) === true) {
+                contaDestino.depositar(valor)
+                console.log(`A Transferencia da conta ${numeroOrigem} para a conta ${numeroDestino} 
+                    foi Efetuada com sucesso!`)
             }
 
         } else
-            console.log(colors.fg.red, "\nA Conta numero: " + numeroOrigem +
-                " e/ou a Conta numero: " + numeroDestino + " não foram encontradas!",
-                colors.reset);
+            console.log("\nConta de Origem e/ou a Conta de Destino não foram Encontradas!")
     }
 
-    //Métodos Auxiliares
+    // Métodos Auxiliares
 
+    // Método para gerar um número para uma nova conta
     public gerarNumero(): number {
-        return ++this.numero;
+        return ++this.numero
     }
 
-    /Checa se uma Conta existe/
+    // Método para procurar uma conta pelo numero
     public buscarNoArray(numero: number): Conta | null {
+        for (let conta of this.listaContas) {
+            if (conta.numero === numero)
+                return conta;
+        }
 
-    for (let conta of this.listaContas) {
-        if (conta.numero === numero)
-            return conta;
+        return null;
     }
-
-    return null;
-}
-
 }
