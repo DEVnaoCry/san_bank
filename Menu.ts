@@ -50,16 +50,16 @@ export function main() {
         console.log("                         6 - Sacar                                             ");
         console.log("                         7 - Depositar                                         ");
         console.log("                         8 - Transferencia de Valor                            ");
-        console.log("                         9 - Sair                                              ");
-        console.log("                                                                               ");
+        console.log("                         9 - Buscar Conta por Titular                                              ");
+        console.log("                         0 - Sair                                              ");
         console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         console.log("                                                                               ",
             colors.bg.blue );
 
-        console.log(colors.bg.white, colors.fg.bluestrong, "Escolha uma opção entre 1 a 9:           ");
+        console.log(colors.bg.white, colors.fg.bluestrong, "Escolha uma opção entre 1 a 9 ou '0' para SAIR:");
         opcao = readlinesync.questionInt("");
 
-        if (opcao == 9) {
+        if (opcao == 0) {
             console.log(colors.bg.blue, colors.fg.white,
                 "\nSan-Bank - Provando que dinheiro, traz felicidade! ($_$) " );
             sobre();
@@ -253,6 +253,7 @@ export function main() {
 
                 keyPress();
                 break;
+                
             default:
                 console.log(colors.bg.redbright, colors.fg.white,
                     "\nOpção Inválida!\n", colors.bg.redbright);
@@ -269,7 +270,7 @@ function sobre(): void {
               ("\n******************************************************");
     console.log("Projeto Desenvolvido por: Filipe Santiago              ");
     console.log("Email para o contato- work.frodrigues@gmail.com        ");
-    console.log("https://github.com/DEVnaoCry #Nemétãodificil¯\_(ツ)_/¯ ");
+    console.log("https://github.com/DEVnaoCry #Nemétãofacil¯\_(ツ)_/¯ ");
     console.log("*******************************************************");
 }
 

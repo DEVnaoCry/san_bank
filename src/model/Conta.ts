@@ -7,7 +7,7 @@ export abstract class Conta {
     private _titular: string;
     private _saldo: number;
 
-    // Método Construtor - Instanciar (Criar) um novo Objeto da Classe Conta
+    // Método Construtor - Instanciar um novo Objeto da Classe Conta
     constructor(_numero: number, _agencia: number, _tipo: number, _titular: string, _saldo: number) {
         this._numero = _numero;
         this._agencia = _agencia;
