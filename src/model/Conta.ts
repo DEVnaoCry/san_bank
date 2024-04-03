@@ -104,7 +104,7 @@ export abstract class Conta {
     public sacar(valor: number): boolean {
 
         if (this._saldo >= valor) {
-            this._saldo = this._saldo - valor; // Mudar
+            this._saldo = this._saldo - valor;                  
             return true;
         }
 
@@ -115,7 +115,7 @@ export abstract class Conta {
 
     // Método Depositar
     public depositar(valor: number): void {
-        this._saldo = this._saldo + valor; // Mudar
+        this._saldo = this._saldo + valor; 
     }
 
     public visualizar(): void {
@@ -132,12 +132,16 @@ export abstract class Conta {
         }
 
         console.log("\n*****************************************************");
-        console.log("Dados da Conta");
-        console.log("*****************************************************");
+        console.log("Dados da Conta: ");
+        console.log("***************************************************** ");
         console.log(`Número da conta: ${this._numero}`);
+
         console.log(`Número da agência: ${this._agencia}`);
+
         console.log(`Tipo da conta: ${tipo}`);
+
         console.log(`Titular da conta: ${this._titular}`);
+
         console.log(`Saldo da conta: ${this._saldo}`);
     }
 }

@@ -12,16 +12,11 @@ export class ContaController implements ContaRepository {
         }
     }
 
-    // Collection Array que aramzenará os Objetos das Classes
-    // ContaCorrente e ContaPoupanca
+
     private listaContas: Array<Conta> = new Array<Conta>();
 
-    // Atributo que será utilizado para controlar o numero das
-    // contas
     public numero: number = 0;
 
-    // Método para Listar os dados de uma Conta
-    // inseridas na Collection listaContas
     procurarPorNumero(numero: number): void {
         let buscaConta = this.buscarNoArray(numero);
 
@@ -31,24 +26,17 @@ export class ContaController implements ContaRepository {
             console.log("\nConta não foi Encontrada!")
     }
 
-    // Método para Listar os dados de todas as Contas
-    // inseridas na Collection listaContas
     listarTodas(): void {
         for (let conta of this.listaContas) {
             conta.visualizar();
         }
     }
 
-    // Método para adicionar Objetos das Classes 
-    // ContaCorrente e ContaPoupanca
-    // na Collection listaContas
     cadastrar(conta: Conta): void {
         this.listaContas.push(conta);
         console.log("A Conta foi adicionada!")
     }
 
-    // Método para atualizar os dados de uma Conta
-    // inseridas na Collection listaContas
     atualizar(conta: Conta): void {
         let buscaConta = this.buscarNoArray(conta.numero);
 
@@ -59,8 +47,6 @@ export class ContaController implements ContaRepository {
             console.log("\nConta não foi Encontrada!")
     }
 
-    // Método para deletar uma Conta
-    // inseridas na Collection listaContas
     deletar(numero: number): void {
         let buscaConta = this.buscarNoArray(numero);
 
